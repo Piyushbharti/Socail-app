@@ -21,5 +21,7 @@ from userAuth import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/register', views.register),
-    path('api/v1/alluser', views.getAllUser)
+    path('api/v1/alluser', views.getAllUser),
+    path('api/v1/user/<int:pk>/', views.studentDetailView),
+    path('api/v1/updateUser/<int:pk>', views.updateCoustomerDetails)
 ]

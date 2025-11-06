@@ -35,3 +35,27 @@ def getAllUser(request):
     except Exception as e:
         print('Something went wrong:', e)
         return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
+@api_view(['GET'])
+def studentDetailView(request, pk):
+    try:
+        student = coustomerUser.objects.get(pk=pk)
+    except coustomerUser.DoesNotExist:
+        return Response({"message" : "Data Does not exist"},status=status.HTTP_400_BAD_REQUEST)
+    serializer = AuthSerializer(student)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def updateCoustomerDetails(request, pk):
+    try:
+        student = coustomerUser.objects.get(pk=pk)
+    except coustomerUser.DoesNotExist:
+        return Response({"message" : "Data Does not exist"},status=status.HTTP_400_BAD_REQUEST)
+    serializer = AuthSerializer(student, data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+    
