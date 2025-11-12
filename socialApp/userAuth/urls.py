@@ -20,8 +20,11 @@ from userAuth import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/register', views.register),
-    path('api/v1/alluser', views.getAllUser),
-    path('api/v1/user/<int:pk>/', views.studentDetailView),
-    path('api/v1/updateUser/<int:pk>', views.updateCoustomerDetails)
+    # path('api/v1/register', views.register),
+    # path('api/v1/alluser', views.getAllUser),
+    # path('api/v1/user/<int:pk>/', views.studentDetailView),
+    # path('api/v1/updateUser/<int:pk>', views.updateCoustomerDetails),
+    # path('api/v1/deleteUser/<int:pk>', views.deleteUser)
+    path('api/v1/allUserByClass', views.coustomer.as_view()),
+    path('api/v1/alluserByClass/<int:pk>/', views.coustomerDetails.as_view()),
 ]

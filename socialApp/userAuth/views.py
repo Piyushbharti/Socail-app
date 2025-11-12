@@ -4,58 +4,104 @@ from rest_framework.response import Response
 from rest_framework import status
 from userAuth.serializer import AuthSerializer
 from userAuth.models import coustomerUser
+from rest_framework.views import APIView
+from django.http import Http404
 
-@csrf_exempt
-@api_view(['POST'])
-def register(req):
-    name = req.data.get('name')
-    password = req.data.get('password')
+# @csrf_exempt
+# @api_view(['POST'])
+# def register(req):
+#     name = req.data.get('name')
+#     password = req.data.get('password')
     
-    if not name or not password:
-        return Response({"error": "Name and password not provided"}, status=status.HTTP_400_BAD_REQUEST)
+#     if not name or not password:
+#         return Response({"error": "Name and password not provided"}, status=status.HTTP_400_BAD_REQUEST)
     
-    try:
-        print(req.data)
-        serializer = AuthSerializer(data=req.data)  # <-- fix here
+#     try:
+#         print(req.data)
+#         serializer = AuthSerializer(data=req.data)  # <-- fix here
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     except Exception as e:
+#         print('Something went wrong:', e)
+#         return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# @api_view(['GET'])
+# def getAllUser(request):
+#     try:
+#         allUser = coustomerUser.objects.all()
+#         serializer = AuthSerializer(allUser, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#     except Exception as e:
+#         print('Something went wrong:', e)
+#         return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
+# @api_view(['GET'])
+# def studentDetailView(request, pk):
+#     try:
+#         student = coustomerUser.objects.get(pk=pk)
+#     except coustomerUser.DoesNotExist:
+#         return Response({"message" : "Data Does not exist"},status=status.HTTP_400_BAD_REQUEST)
+#     serializer = AuthSerializer(student)
+#     return Response(serializer.data, status=status.HTTP_200_OK)
+
+# @api_view(['PUT'])
+# def updateCoustomerDetails(request, pk):
+#     try:
+#         student = coustomerUser.objects.get(pk=pk)
+#     except coustomerUser.DoesNotExist:
+#         return Response({"message" : "Data Does not exist"},status=status.HTTP_400_BAD_REQUEST)
+#     serializer = AuthSerializer(student, data = request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+# @api_view(['DELETE'])
+# def deleteUser(request, pk):
+#     try:
+#         student = coustomerUser.objects.get(pk=pk)
+#     except coustomerUser.DoesNotExist:
+#         return Response({"message": "Data Does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+#     student.delete()
+#     return Response(status=status.HTTP_200_OK)
+    
+class coustomer(APIView):
+    def get(self, request):
+        alldata = coustomerUser.objects.all()
+        serializer = AuthSerializer(alldata, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    def post(self, request):
+        data = AuthSerializer(data = request.data)
+        if data.is_valid():
+            data.save()
+            return Response('Data save success', status.HTTP_201_CREATED)
+      
+class coustomerDetails(APIView):
+    def getObject(self, pk):
+        try:
+            data = coustomerUser.objects.get(pk = pk)
+            return data
+        except:
+            return Http404
+    def get(self, request, pk):
+        employee = self.getObject(pk)
+        serializer = AuthSerializer(employee)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, pk):
+        coustomer = self.getObject(pk)
+        serializer = AuthSerializer(coustomer, data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        print('Something went wrong:', e)
-        return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-@api_view(['GET'])
-def getAllUser(request):
-    try:
-        allUser = coustomerUser.objects.all()
-        serializer = AuthSerializer(allUser, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except Exception as e:
-        print('Something went wrong:', e)
-        return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-    
-@api_view(['GET'])
-def studentDetailView(request, pk):
-    try:
-        student = coustomerUser.objects.get(pk=pk)
-    except coustomerUser.DoesNotExist:
-        return Response({"message" : "Data Does not exist"},status=status.HTTP_400_BAD_REQUEST)
-    serializer = AuthSerializer(student)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-@api_view(['PUT'])
-def updateCoustomerDetails(request, pk):
-    try:
-        student = coustomerUser.objects.get(pk=pk)
-    except coustomerUser.DoesNotExist:
-        return Response({"message" : "Data Does not exist"},status=status.HTTP_400_BAD_REQUEST)
-    serializer = AuthSerializer(student, data = request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request, pk):
+        serializer = coustomerUser.objects.get(pk=pk)
+        serializer.delete()
+        return Response('User delete success')
+        
     
