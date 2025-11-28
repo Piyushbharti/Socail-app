@@ -1,15 +1,38 @@
-def subsetsWithDup(nums):
+def solveNQueens(n):
     ans = []
-    nums.sort()
-    def solve(index, curr):
-        ans.append(curr[:])
-        for i in range(index, len(nums)):
-            if i>index and nums[i]==nums[i-1]:
-                continue
-            curr.append(nums[i])
-            solve(i+1, curr)
-            curr.pop()
-    solve(0, [])
+    chess = ['.'*n for i in range(n)]
+    def check(row, col, n, board):
+        duprow = row
+        dupcol = col
+        while row>=0 and col>=0:
+            if board[row][col] == 'Q':
+                return False
+            col-=1
+            row-=1
+        row = duprow
+        col = dupcol
+        while col>=0:
+            if board[row][col] == 'Q':
+                return False
+            col-=1
+        row = duprow
+        col =dupcol
+        while row<n and col>=0:
+            if board[row][col] == 'Q':
+                return False
+            row +=1
+            col -=1
+        return True
+
+    def solve(col, n, chess):
+        if col == n:
+            ans.append(chess[:])
+            return
+        for i in range(n):
+            if check(i, col, n, chess):
+                chess[i] = chess[i][:col] + 'Q' + chess[i][col+1:]
+                solve(col+1, n, chess)
+                chess[i] = chess[i][:col] + '.' + chess[i][col+1:]
+    solve(0, n, chess)
     return ans
-nums = [1,2,2]
-print(subsetsWithDup(nums))
+print(solveNQueens(3))

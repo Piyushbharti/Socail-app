@@ -1,22 +1,8 @@
-"""
-URL configuration for socialApp project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+from rest_framework.routers import DefaultRouter
 from django.contrib import admin
 from django.urls import path,include
 from userAuth import views
+from blogs import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +11,11 @@ urlpatterns = [
     # path('api/v1/user/<int:pk>/', views.studentDetailView),
     # path('api/v1/updateUser/<int:pk>', views.updateCoustomerDetails),
     # path('api/v1/deleteUser/<int:pk>', views.deleteUser)
-    path('api/v1/allUserByClass', views.coustomer.as_view()),
-    path('api/v1/alluserByClass/<int:pk>/', views.coustomerDetails.as_view()),
+    # path('api/v1/allUserByClass', views.Employees.as_view()),
+    # path('api/v1/allUser/update/<int:pk>', views.EmployeeDetails.as_view()),
+    # path('api/v1/allmixin', views.EmployeeDetails.as_view())
+    # path('api/v1/employee', views.list)
+    path('api/v1/blog', views.BlogOperations.as_view()),
+    path('api/v1/comment', views.commentOperations.as_view())
+    # path('api/v1/alluserByClass/<int:pk>/', views.coustomerDetails.as_view()),
 ]

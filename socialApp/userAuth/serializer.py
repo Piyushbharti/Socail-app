@@ -5,3 +5,4 @@ class AuthSerializer(serializers.ModelSerializer):
     class Meta:
         model = coustomerUser
         fields = "__all__"
+

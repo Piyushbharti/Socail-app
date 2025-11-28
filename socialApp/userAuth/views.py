@@ -6,6 +6,7 @@ from userAuth.serializer import AuthSerializer
 from userAuth.models import coustomerUser
 from rest_framework.views import APIView
 from django.http import Http404
+from rest_framework import mixins, generics, viewsets
 
 # @csrf_exempt
 # @api_view(['POST'])
@@ -67,41 +68,78 @@ from django.http import Http404
 #         return Response({"message": "Data Does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 #     student.delete()
 #     return Response(status=status.HTTP_200_OK)
-    
-class coustomer(APIView):
-    def get(self, request):
-        alldata = coustomerUser.objects.all()
-        serializer = AuthSerializer(alldata, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    def post(self, request):
-        data = AuthSerializer(data = request.data)
-        if data.is_valid():
-            data.save()
-            return Response('Data save success', status.HTTP_201_CREATED)
+     
+# class coustomer(APIView):
+#     def get(self, request):
+#         alldata = coustomerUser.objects.all()
+#         serializer = AuthSerializer(alldata, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#     def post(self, request):
+#         data = AuthSerializer(data = request.data)
+#         if data.is_valid():
+#             data.save()
+#             return Response('Data save success', status.HTTP_201_CREATED)
       
-class coustomerDetails(APIView):
-    def getObject(self, pk):
-        try:
-            data = coustomerUser.objects.get(pk = pk)
-            return data
-        except:
-            return Http404
-    def get(self, request, pk):
-        employee = self.getObject(pk)
-        serializer = AuthSerializer(employee)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+# class coustomerDetails(APIView):
+#     def getObject(self, pk):
+#         try:
+#             data = coustomerUser.objects.get(pk = pk)
+#             return data
+#         except:
+#             return Http404
+#     def get(self, request, pk):
+#         employee = self.getObject(pk)
+#         serializer = AuthSerializer(employee)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def put(self, request, pk):
-        coustomer = self.getObject(pk)
-        serializer = AuthSerializer(coustomer, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def put(self, request, pk):
+#         coustomer = self.getObject(pk)
+#         serializer = AuthSerializer(coustomer, data = request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    def delete(self, request, pk):
-        serializer = coustomerUser.objects.get(pk=pk)
-        serializer.delete()
-        return Response('User delete success')
+#     def delete(self, request, pk):
+#         serializer = coustomerUser.objects.get(pk=pk)
+#         serializer.delete()
+#         return Response('User delete success')
+
+
+# Mixins
+# class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+#     queryset = coustomerUser.objects.all()
+#     serializer_class = AuthSerializer
+    
+#     def get(self, request):
+#         return self.list(request)
+#     def post(self, request):
+#         return self.create(request)
+    
+# class EmployeeDetails(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+#     queryset = coustomerUser.objects.all()
+#     serializer_class = AuthSerializer
+#     def get(self, request, pk):
+#         return self.retrieve(request, pk)
+#     def put(self, request, pk):
+#         return self.update(request, pk)
+#     def delete(self, request, pk):
+        # return self.destroy(request, pk)
         
+        
+# Generic Views
+# class Employees(generics.ListCreateAPIView):
+#     queryset = coustomerUser.objects.all() # isme v queryset likhna jaruri
+#     serializer_class = AuthSerializer   # serializer_class likhna jaruri h
+
+
+# class EmployeeDetails(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = coustomerUser.objects.all() # isme v queryset likhna jaruri
+#     serializer_class = AuthSerializer # serializer_class likhna jaruri h
+#     lookup_field = 'pk' # lookup_field likhna jaruri h
+    
+class EmployeeViewSet(viewsets.ViewSet):
+    def list(self, request):
+        serializer = AuthSerializer.objects.all()
+        return Response(serializer.data)
     
