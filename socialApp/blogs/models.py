@@ -9,6 +9,7 @@ class Blog(models.Model):
 
 class comment(models.Model):
     blog = models.ForeignKey(Blog, on_delete= models.CASCADE, related_name="comment")
-    comment_desc = models.TextField() 
+    comment_desc = models.TextField()
+    
     def __str__(self):
-        return self.comment_desc       
+        return self.comment_desc

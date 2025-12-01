@@ -29,15 +29,7 @@ from rest_framework import mixins, generics, viewsets
 #         print('Something went wrong:', e)
 #         return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-# @api_view(['GET'])
-# def getAllUser(request):
-#     try:
-#         allUser = coustomerUser.objects.all()
-#         serializer = AuthSerializer(allUser, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-#     except Exception as e:
-#         print('Something went wrong:', e)
-#         return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
     
 # @api_view(['GET'])
@@ -143,3 +135,16 @@ class EmployeeViewSet(viewsets.ViewSet):
         serializer = AuthSerializer.objects.all()
         return Response(serializer.data)
     
+@api_view(['GET'])
+def getAllUser(request):
+    try:
+        allUser = coustomerUser.objects.all()
+        serializer = AuthSerializer(allUser, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print('Something went wrong:', e)
+        return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class EmployeeViewSet(viewsets.ViewSet):
+    def list(self, request):
+        serializer = AuthSerializer.objects.all()
+        return Response(serializer.data)

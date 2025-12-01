@@ -16,6 +16,9 @@ urlpatterns = [
     # path('api/v1/allmixin', views.EmployeeDetails.as_view())
     # path('api/v1/employee', views.list)
     path('api/v1/blog', views.BlogOperations.as_view()),
-    path('api/v1/comment', views.commentOperations.as_view())
+    path('api/v1/comment', views.commentOperations.as_view()),
+    path('api/v1/blog/<int:pk>/', views.getBlogById),
+    # path('api/v1/blog/<int:pk>/', views.BlogDetailView.as_view()),
+    path('api/v1/comment/<int:pk>/', views.commentDetailView.as_view())
     # path('api/v1/alluserByClass/<int:pk>/', views.coustomerDetails.as_view()),
 ]
