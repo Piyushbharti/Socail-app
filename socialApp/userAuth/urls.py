@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path,include
 from userAuth import views
 from blogs import views
+from employees.views import EmployeeOperation
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,6 +20,7 @@ urlpatterns = [
     path('api/v1/comment', views.commentOperations.as_view()),
     path('api/v1/blog/<int:pk>/', views.getBlogById),
     # path('api/v1/blog/<int:pk>/', views.BlogDetailView.as_view()),
-    path('api/v1/comment/<int:pk>/', views.commentDetailView.as_view())
+    path('api/v1/comment/<int:pk>/', views.commentDetailView.as_view()),
+    path('api/v1/employee', EmployeeOperation.as_view()),
     # path('api/v1/alluserByClass/<int:pk>/', views.coustomerDetails.as_view()),
 ]

@@ -4,10 +4,15 @@ from .models import Blog, comment
 from .serializers import blogSerializer, CommentSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from userAuth.pagination import CustomPagination
+from .filter import BlogFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 @api_view(['GET'])
 def getBlogById(request, pk):
+    
     try:
         getBlog = Blog.objects.get(pk=pk)
     except Blog.DoesNotExist:
@@ -23,7 +28,11 @@ def getBlogById(request, pk):
 class BlogOperations(generics.ListCreateAPIView):
     queryset = Blog.objects.all() # isme v queryset likhna jaruri
     serializer_class = blogSerializer
-    
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = BlogFilter
+    search_fields = ['blog_title']
+    ordering_fields = ['id']
     
 class commentOperations(generics.ListCreateAPIView):
     queryset = comment.objects.all()
